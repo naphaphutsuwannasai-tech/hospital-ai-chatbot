@@ -2,8 +2,6 @@
 
 > An AI-powered hospital chatbot that assists users in searching for department information, contact numbers, locations, and IT support services. The system supports multimodal interaction by combining text and image inputs to provide intelligent and efficient assistance.
 
-![Hospital AI Chatbot](images/dashboard.png)
-
 ---
 
 # Overview
