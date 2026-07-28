@@ -1,0 +1,130 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3); 
+    --user-bubble: #0084ff;
+    --bot-bubble: #f0f2f5;
+    --bg-color: #ffffff;
+}
+
+body {
+    font-family: 'Sarabun', -apple-system, system-ui, sans-serif;
+    background: #f7f9fb;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.chat-container {
+    width: 40%;
+    max-width: 600px;
+    height: 80vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #efefef;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-color);
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: var(--primary-gradient);
+    border-radius: 50%;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+}
+
+.user {
+    align-self: flex-end;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 20px 20px 4px 20px;
+    max-width: 80%;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(110, 142, 251, 0.3);
+}
+
+.bot {
+    align-self: flex-start;
+    background: var(--bot-bubble);
+    color: #1a1a1a;
+    padding: 12px 18px;
+    border-radius: 20px 20px 20px 4px;
+    max-width: 80%;
+    font-size: 15px;
+    line-height: 1.5;
+    border: 1px solid #e8eaed;
+}
+
+.input-box {
+    padding: 15px 20px;
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid #efefef;
+}
+
+.input-box input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #dbdbdb;
+    border-radius: 30px;
+    outline: none;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.input-box input:focus {
+    border-color: #a777e3;
+}
+
+.input-box button {
+    background: transparent;
+    color: #0084ff;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.input-box button:hover {
+    color: #a777e3;
+}
+
+@media screen and (max-width: 768px) {
+    .chat-container {
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .user, .bot, .input-box input {
+        font-size: 16px;
+    }
+}
