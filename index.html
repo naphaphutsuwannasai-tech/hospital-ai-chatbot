@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Hospital AI Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --main-gradient: linear-gradient(135deg, #1d4ed8, #7e22ce, #db2777);
+            --bg-light: #f8fafc;
+            --bot-bubble: #f1f5f9;
+        }
+        * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+        body { background: #eef2f7; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+
+        .chat-container {
+            width: 100%; max-width: 420px; height: 90vh; background: white;
+            display: flex; flex-direction: column; border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden;
+        }
+
+        .chat-header { background: white; padding: 18px; display: flex; align-items: center; border-bottom: 1px solid #f0f0f0; gap: 12px; }
+        .bot-avatar { width: 40px; height: 40px; background: var(--main-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #ffffff; }
+        .user { align-self: flex-end; background: var(--main-gradient); color: white; padding: 12px 16px; border-radius: 18px 18px 4px 18px; max-width: 80%; font-size: 14px; }
+        .bot { align-self: flex-start; background: var(--bot-bubble); color: #334155; padding: 12px 16px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 14px; line-height: 1.5; }
+
+        #preview-container {
+            display: none; padding: 10px; background: #f8fafc;
+            border-top: 1px solid #eee; position: relative; text-align: center;
+        }
+        #preview-img { max-height: 100px; border-radius: 8px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-close-preview {
+            position: absolute; top: 5px; right: 10px; background: #ef4444; color: white;
+            border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;
+        }
+
+        .input-box { padding: 15px; background: white; display: flex; gap: 8px; align-items: center; border-top: 1px solid #f0f0f0; }
+        .input-box input[type="text"] { flex: 1; padding: 12px 15px; border-radius: 25px; border: 1px solid #e2e8f0; outline: none; background: #f8fafc; }
+        .btn-icon { background: #f1f5f9; color: #7e22ce; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .btn-send { background: var(--main-gradient); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="bot-avatar"><i class="fa-solid fa-robot"></i></div>
+        <div class="header-text">
+            <h3 style="margin:0; font-size:16px;">AI Hospital Guide</h3>
+            <span style="font-size:12px; color:#10b981; font-weight:bold;">● พร้อมช่วยเหลือ</span>
+        </div>
+    </div>
+
+    <div id="chat" class="chat-box">
+        <div class="bot"><span>สวัสดีค่ะ ยินดีต้อนรับสู่ระบบ AI AYH<br>มีอะไรให้ฉันช่วยเหลือไหมคะ?</span></div>
+    </div>
+
+    <div id="preview-container">
+        <button class="btn-close-preview" onclick="clearPreview()">×</button>
+        <img id="preview-img" src="">
+    </div>
+
+    <div class="input-box">
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        
+        <button class="btn-icon" title="เลือกรูปภาพ" onclick="document.getElementById('imageInput').click()">
+            <i class="fa-solid fa-camera"></i>
+        </button>
+
+        <input type="text" id="q" placeholder="พิมพ์ข้อความ หรือส่งรูปภาพ..." autocomplete="off">
+        
+        <button onclick="handleSend()" class="btn-send">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    let selectedFile = null;
+
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+        selectedFile = e.target.files[0];
+        if (selectedFile) {
+            const url = URL.createObjectURL(selectedFile);
+            document.getElementById('preview-img').src = url;
+            document.getElementById('preview-container').style.display = 'block';
+        }
+    });
+
+    function clearPreview() {
+        selectedFile = null;
+        document.getElementById('imageInput').value = '';
+        document.getElementById('preview-container').style.display = 'none';
+    }
+
+    function addMessage(text, sender, elementId = null) {
+        const chat = document.getElementById("chat");
+        const div = document.createElement("div");
+        div.className = sender;
+        if (elementId) div.id = elementId;
+        
+        const textSpan = document.createElement("span");
+        textSpan.innerHTML = text.replace(/\n/g, '<br>');
+        div.appendChild(textSpan);
+
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight; 
+    }
+
+    function handleSend() {
+        const input = document.getElementById("q");
+        const text = input.value.trim();
+        if (!text && !selectedFile) return;
+
+        let displayContent = text;
+        if (selectedFile) {
+            const url = URL.createObjectURL(selectedFile);
+            displayContent = `<img src="${url}" style="max-width:150px; border-radius:8px;"><br>${text}`;
+        }
+        addMessage(displayContent, "user");
+
+        const formData = new FormData();
+        formData.append('q', text);
+        if (selectedFile) formData.append('image', selectedFile);
+
+        const loadingId = "loading-" + Date.now();
+        addMessage("<i class='fa-solid fa-spinner fa-spin'></i> กำลังวิเคราะห์...", "bot", loadingId);
+
+        input.value = "";
+        clearPreview();
+
+        fetch('/api/ask-multimodal', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            const loadEl = document.getElementById(loadingId);
+            if(loadEl) loadEl.remove();
+            addMessage(data.answer, "bot"); 
+        })
+        .catch(err => {
+            console.error(err);
+            const loadEl = document.getElementById(loadingId);
+            if(loadEl) loadEl.remove();
+            addMessage("เกิดข้อผิดพลาดในการเชื่อมต่อค่ะ", "bot");
+        });
+    }
+
+    document.getElementById("q").addEventListener("keypress", (e) => { 
+        if (e.key === "Enter") handleSend(); 
+    });
+</script>
+</body>
+</html>
