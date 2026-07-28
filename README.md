@@ -198,16 +198,9 @@ graph TD
 
 ```text
 hospital-ai-chatbot/
-│
 ├── static/
 │   ├── css/
 │   ├── js/
-│   └── uploads/
-│
-├── templates/
-│
-├── data/
-│
 ├── app.py
 ├── ai_excel_chat.py
 ├── semantic_search.py
@@ -219,7 +212,6 @@ hospital-ai-chatbot/
 ├── db_config.py
 ├── logger.py
 ├── import_excel.py
-│
 ├── requirements.txt
 ├── .env.example
 └── README.md
